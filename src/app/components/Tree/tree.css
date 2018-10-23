@@ -1,0 +1,41 @@
+.document-tree {
+  --tree-heigth: 34px;
+}
+
+.ant-tree li {
+  padding: 0;
+}
+
+.ant-tree li span.ant-tree-iconEle,
+.ant-tree li span.ant-tree-switcher {
+  height: var(--tree-heigth);
+  line-height: var(--tree-heigth);
+}
+
+.ant-tree li .ant-tree-node-content-wrapper {
+  height: var(--tree-heigth);
+  line-height: var(--tree-heigth);
+}
+
+.ant-tree.ant-tree-directory .ant-tree-child-tree > li span.ant-tree-node-content-wrapper:before,
+.ant-tree.ant-tree-directory > li span.ant-tree-node-content-wrapper:before {
+  height: var(--tree-heigth);
+}
+
+.ant-tree.ant-tree-directory
+  .ant-tree-child-tree
+  > li.ant-tree-treenode-selected
+  > span.ant-tree-node-content-wrapper:before,
+.ant-tree.ant-tree-directory
+  > li.ant-tree-treenode-selected
+  > span.ant-tree-node-content-wrapper:before {
+  background: #ff7a7a;
+}
+
+.ant-tree.ant-tree-directory
+  .ant-tree-child-tree
+  > li
+  span.ant-tree-node-content-wrapper:hover:before,
+.ant-tree.ant-tree-directory > li span.ant-tree-node-content-wrapper:hover:before {
+  background: #ffe6e6;
+}

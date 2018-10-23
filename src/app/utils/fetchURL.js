@@ -4,6 +4,7 @@ const API_URL = "_api/web/lists/getbytitle('Documents')/items";
 const $select = [
   "File/Name",
   "File/ServerRelativeUrl",
+  "File/TimeCreated",
   "DocNameSTD/Title",
   "DocNameSTD/SubCategoria",
   "DocNameSTD/DocType",

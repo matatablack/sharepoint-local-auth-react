@@ -8,34 +8,53 @@ const StoreContext = React.createContext();
 const StoreProvider = StoreContext.Provider;
 const StoreConsumer = StoreContext.Consumer;
 
+const isDevelopment = true;
 class Container extends Component {
   state = {
-    data: [],
+    data: {
+      documents: [],
+      tree: []
+    },
     isLoading: true,
     results: []
   };
 
   async componentDidMount() {
-    const authToken = await Auth.getToken();
-    this.setState({ authToken });
+    if (isDevelopment) {
+      const authToken = await Auth.getToken();
+      this.setState({ authToken });
+    }
     this._fetchData();
   }
 
   async _fetchData() {
     this.setState({ isLoading: true });
 
+    const productionHeaders = new Headers({ Accept: "application/json;odata=verbose" });
+    const developMentHeaders = new Headers({
+      Accept: "application/json;odata=nometadata",
+      Authorization: `Bearer ${this.state.authToken}`
+    });
+
     const data = await fetch(fetchURL, {
-      headers: new Headers({
-        Accept: "application/json;odata=nometadata",
-        Authorization: `Bearer ${this.state.authToken}`
-      })
+      headers: isDevelopment ? developMentHeaders : productionHeaders
     })
       .then(res => res.json())
-      .then(d => d.value)
+      .then(d => {
+        if (isDevelopment) {
+          return d.value;
+        } else {
+          return d.d.results;
+        }
+      })
       .catch(err => console.error("Error fetching data", err));
 
-    console.log("%c Original data:", "background: #000; color: #bada55", data);
-    console.log("%c Formatted data:", "background: #bada55; color: #000", formatData(data));
+    /* console.log("%c Original data:", "background: #000; color: #bada55", data);
+    console.log("%c Formatted data:", "background: #bada55; color: #000", formatData(data)); */
+
+    /* {
+      headers: 
+    } */
 
     this.setState({ data: formatData(data), isLoading: false });
   }

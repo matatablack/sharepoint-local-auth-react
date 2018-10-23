@@ -1,17 +1,20 @@
 import React from "react";
 import { Card } from "antd";
 import { Filters, Tree } from "./";
+import { connect } from "./../";
 
-export default function Documents() {
+function Documents(props) {
   return (
     <Card
       title={<h3 style={{ margin: 0 }}> Documents </h3>}
-      extra={<a href="http://google.com"> View All </a>}
       style={{ height: "100%" }}
       hoverable
+      loading={props.store.isLoading}
     >
-      <Filters />
+      {/* <Filters /> */}
       <Tree />
     </Card>
   );
 }
+
+export default connect(Documents);

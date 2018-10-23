@@ -1,6 +1,6 @@
 import React from "react";
-import { Tree, Input } from "antd";
-import { connect } from "./../index";
+import { Tree, Input, Icon } from "antd";
+import { connect } from "./../../index";
 
 const TreeNode = Tree.TreeNode;
 const Search = Input.Search;
@@ -78,7 +78,7 @@ class SearchTree extends React.Component {
   onChange = e => {
     const value = e.target.value;
     const treeData = this.props.store.data.tree;
-    const expandedKeys = treeData
+    const expandedKeys = this.props.store.data.dataList
       .map(item => {
         if (item.title.indexOf(value) > -1) {
           return getParentKey(item.key, treeData);
@@ -86,8 +86,9 @@ class SearchTree extends React.Component {
         return null;
       })
       .filter((item, i, self) => item && self.indexOf(item) === i);
+
     this.setState({
-      expandedKeys,
+      expandedKeys: value ? expandedKeys : [],
       searchValue: value,
       autoExpandParent: true
     });
@@ -96,7 +97,6 @@ class SearchTree extends React.Component {
   render() {
     const { searchValue, expandedKeys, autoExpandParent } = this.state;
 
-    //console.log(gData);
     const treeData = this.props.store.data.tree;
 
     const loop = data => {
@@ -121,22 +121,34 @@ class SearchTree extends React.Component {
             </TreeNode>
           );
         }
-        return <TreeNode key={item.key} title={title} />;
+        return (
+          <TreeNode
+            key={item.key}
+            title={
+              <a href={`https://partner.coca-cola.com${item.url}`} download target="_blank">
+                {title}
+              </a>
+            }
+            isLeaf
+            selectable={false}
+            /* icon={({ selected }) => <Icon type={selected ? "frown" : "frown-o"} />} */
+          />
+        );
       });
     };
     return (
-      <div>
+      <div className="document-tree">
         <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
         {this.props.store.isLoading ? (
-          <h2>Loading ... </h2>
+          ""
         ) : (
-          <Tree
+          <Tree.DirectoryTree
             onExpand={this.onExpand}
             expandedKeys={expandedKeys}
             autoExpandParent={autoExpandParent}
           >
             {loop(treeData)}
-          </Tree>
+          </Tree.DirectoryTree>
         )}
       </div>
     );

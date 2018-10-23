@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, List, Tooltip, Icon } from "antd";
+import { Card, List, Icon } from "antd";
 
 const data = [
   {
@@ -19,11 +19,7 @@ export default function QuickLinks() {
   return (
     <Card
       title="Quick Links"
-      extra={
-        <Tooltip placement="topRight" title="Manage your links" arrowPointAtCenter>
-          <Icon type="pushpin" theme="filled" />
-        </Tooltip>
-      }
+      extra={<Icon type="pushpin" theme="filled" />}
       bodyStyle={{ padding: "5px 24px" }}
       hoverable
       style={{ minHeight: "30%" }}

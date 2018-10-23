@@ -33,8 +33,13 @@ body {
   align-items: center;
   padding: 20px 35px;
   height: 85px;
-  color: rgb(60, 60, 60);
+  /* color: rgb(60, 60, 60); */
+  color: white;
   background-color: white;
+  /* background: linear-gradient(to right, #ef473a, #cb2d3e); */
+  /* background: linear-gradient(to right, #413642, #372a44); */
+  /* background: linear-gradient(to right, #e52d27, #b31217); */
+  background: linear-gradient(to right, #585858, #525252);
 }
 .layout-header__logo {
   height: 100%;
@@ -49,7 +54,7 @@ body {
   padding: 25px 35px;
   display: flex;
   color: white;
-  background-color: rgb(30, 30, 30);
+  background: linear-gradient(to right, #585858, #525252);
 }
 
 .aside__divider {
@@ -57,5 +62,21 @@ body {
 }
 
 .quick-links__link {
+  transition: all 0.3s ease;
+}
+
+.quick-links__link:hover {
+  transition: all 0.3s ease;
+  opacity: 0.9;
+}
+.quick-links__link:hover h4 {
+  transition: all 0.3s ease;
   color: red;
 }
+
+.quick-links__link:hover .ant-list-item-meta-description {
+  transition: all 0.3s ease;
+  color: rgb(36, 36, 36, 0.7);
+}
+
+@import url(./components/index.css);

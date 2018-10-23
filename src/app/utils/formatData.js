@@ -1,4 +1,5 @@
 const tree = [];
+const dataList = [];
 
 function formatData(data) {
   const categorias = new Set();
@@ -7,7 +8,7 @@ function formatData(data) {
 
   const documents = data.map(({ DocNameSTD, File }) => {
     const { Title, SubCategoria, MasterDocumentCode, DocType, DocName, VersionDoc } = DocNameSTD;
-    const { Name, ServerRelativeUrl } = File;
+    const { Name, TimeCreated, ServerRelativeUrl } = File;
 
     const result = {
       categoria: Title,
@@ -19,7 +20,8 @@ function formatData(data) {
         version: VersionDoc
       },
       name: Name,
-      url: ServerRelativeUrl
+      url: ServerRelativeUrl,
+      created: new Date(TimeCreated).getTime()
     };
 
     categorias.add(result.categoria);
@@ -31,12 +33,23 @@ function formatData(data) {
     return result;
   });
 
+  function iterateTree(tree) {
+    tree.forEach(({ key, title, children }) => {
+      dataList.push({ key, title });
+      if (children) return iterateTree(children);
+    });
+  }
+
+  iterateTree(tree);
+
   return {
     tree,
     documents,
+    dataList
+    /* 
     categorias: Array.from(categorias),
     subcategorias: Array.from(subcategorias),
-    codes: removeDuplicates(documentCodes, "code")
+    codes: removeDuplicates(documentCodes, "code") */
   };
 }
 
@@ -95,58 +108,6 @@ function buildTree(document) {
     return subcat.children.push(struct.children[0].children[0]);
   }
   if (!docFile) {
-    return docCode.children.push(struct.children[0].children[0]);
+    return docCode.children.push(struct.children[0].children[0].children[0]);
   }
 }
-
-const treeStructure = [
-  {
-    title: "0-0",
-    key: "0-0",
-    children: [
-      {
-        title: "0-0-0",
-        key: "0-0-0",
-        children: [
-          {
-            title: "0-0-0-0",
-            key: "0-0-0-0"
-          },
-          {
-            title: "0-0-0-1",
-            key: "0-0-0-1"
-          },
-          {
-            title: "0-0-0-2",
-            key: "0-0-0-2"
-          }
-        ]
-      }
-    ]
-  }
-];
-
-const cat = [
-  {
-    title: "title",
-    subcategorias: [
-      {
-        title: "title",
-        codes: [
-          {
-            code: "SLBU-RQ-101",
-            type: "Protocolos",
-            scope: "Internal",
-            documents: [
-              {
-                title: "",
-                type: "",
-                url: 0
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
-];
