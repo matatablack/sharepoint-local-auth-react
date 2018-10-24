@@ -2,6 +2,11 @@
   --tree-heigth: 34px;
 }
 
+.document-tree a,
+a:visited {
+  color: #e03d3d !important;
+}
+
 .ant-tree li {
   padding: 0;
 }

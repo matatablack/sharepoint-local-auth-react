@@ -2,9 +2,9 @@ import React, { Fragment } from "react";
 import { Card, List, Icon } from "antd";
 import { connect } from "./../";
 
-function QuickLinks({ store }) {
+function LastDocuments({ store }) {
   const { documents } = store.data;
-  const data = documents.sort((a, b) => a.created - b.created);
+  const data = documents.sort((a, b) => b.created - a.created);
   return (
     <Fragment>
       <Card
@@ -13,6 +13,7 @@ function QuickLinks({ store }) {
         bodyStyle={{ padding: "5px 24px" }}
         hoverable
         style={{ minHeight: "360px" }}
+        bordered={false}
       >
         <List
           loading={store.isLoading}
@@ -37,10 +38,4 @@ function QuickLinks({ store }) {
   );
 }
 
-/*
-            data.length
-              ? data
-                  .filter((v, i) => i < 4)
-                  .map(doc => ({ ...doc, created: new Date(doc.created).toLocaleDateString() }))*/
-
-export default connect(QuickLinks);
+export default connect(LastDocuments);

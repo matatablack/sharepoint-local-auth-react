@@ -5,47 +5,6 @@ import { connect } from "./../../index";
 const TreeNode = Tree.TreeNode;
 const Search = Input.Search;
 
-/* const x = 3;
-const y = 2;
-const z = 1;
-const gData = [];
-
-const generateData = (_level, _preKey, _tns) => {
-  const preKey = _preKey || "0";
-  const tns = _tns || gData;
-
-  const children = [];
-  for (let i = 0; i < x; i++) {
-    const key = `${preKey}-${i}`;
-    tns.push({ title: key, key });
-    if (i < y) {
-      children.push(key);
-    }
-  }
-  if (_level < 0) {
-    return tns;
-  }
-  const level = _level - 1;
-  children.forEach((key, index) => {
-    tns[index].children = [];
-    return generateData(level, key, tns[index].children);
-  });
-};
-generateData(z);
-
-const dataList = [];
-const generateList = data => {
-  for (let i = 0; i < data.length; i++) {
-    const node = data[i];
-    const key = node.key;
-    dataList.push({ key, title: key });
-    if (node.children) {
-      generateList(node.children, node.key);
-    }
-  }
-};
-generateList(gData); */
-
 const getParentKey = (key, tree) => {
   let parentKey;
   for (let i = 0; i < tree.length; i++) {
@@ -80,7 +39,7 @@ class SearchTree extends React.Component {
     const treeData = this.props.store.data.tree;
     const expandedKeys = this.props.store.data.dataList
       .map(item => {
-        if (item.title.indexOf(value) > -1) {
+        if (item.title.toLowerCase().indexOf(value.toLowerCase()) > -1) {
           return getParentKey(item.key, treeData);
         }
         return null;
@@ -101,19 +60,21 @@ class SearchTree extends React.Component {
 
     const loop = data => {
       return data.map(item => {
-        const index = item.title.indexOf(searchValue);
+        const index = item.title.toLowerCase().indexOf(searchValue.toLowerCase());
         const beforeStr = item.title.substr(0, index);
         const afterStr = item.title.substr(index + searchValue.length);
+        const valueStr = item.title.substr(index, searchValue.length);
         const title =
           index > -1 ? (
             <span>
               {beforeStr}
-              <span style={{ color: "#f50" }}>{searchValue}</span>
+              <span style={{ color: "rgb(7, 152, 86)" }}>{valueStr}</span>
               {afterStr}
             </span>
           ) : (
             <span>{item.title}</span>
           );
+
         if (item.children) {
           return (
             <TreeNode key={item.key} title={title}>
@@ -131,7 +92,6 @@ class SearchTree extends React.Component {
             }
             isLeaf
             selectable={false}
-            /* icon={({ selected }) => <Icon type={selected ? "frown" : "frown-o"} />} */
           />
         );
       });

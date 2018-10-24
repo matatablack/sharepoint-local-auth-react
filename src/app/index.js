@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import App from "./App";
-import Auth from "./utils/Auth";
-import { fetchURL } from "./utils/fetchURL";
+import fetchData from "./utils/fetchData";
+import { documentsURL, quickLinksURL, userURL } from "./utils/fetchURL";
 import formatData from "./utils/formatData";
+import { isDevelopment } from "./constants";
 
 const StoreContext = React.createContext();
 const StoreProvider = StoreContext.Provider;
 const StoreConsumer = StoreContext.Consumer;
 
-const isDevelopment = true;
 class Container extends Component {
   state = {
     data: {
@@ -16,50 +16,72 @@ class Container extends Component {
       tree: []
     },
     isLoading: true,
-    results: []
+    results: [],
+    user: {
+      name: "",
+      groups: "",
+      isAdmin: false
+    }
   };
 
-  async componentDidMount() {
-    if (isDevelopment) {
-      const authToken = await Auth.getToken();
-      this.setState({ authToken });
-    }
-    this._fetchData();
+  componentDidMount() {
+    this.fetchDocuments();
+    this.getCurrenUser();
   }
 
-  async _fetchData() {
-    this.setState({ isLoading: true });
-
-    const productionHeaders = new Headers({ Accept: "application/json;odata=verbose" });
-    const developMentHeaders = new Headers({
-      Accept: "application/json;odata=nometadata",
-      Authorization: `Bearer ${this.state.authToken}`
-    });
-
-    const data = await fetch(fetchURL, {
-      headers: isDevelopment ? developMentHeaders : productionHeaders
-    })
-      .then(res => res.json())
-      .then(d => {
-        if (isDevelopment) {
-          return d.value;
-        } else {
-          return d.d.results;
-        }
-      })
-      .catch(err => console.error("Error fetching data", err));
-
-    /* console.log("%c Original data:", "background: #000; color: #bada55", data);
-    console.log("%c Formatted data:", "background: #bada55; color: #000", formatData(data)); */
-
-    /* {
-      headers: 
-    } */
-
+  fetchDocuments = async () => {
+    const data = await fetchData(documentsURL);
     this.setState({ data: formatData(data), isLoading: false });
+  };
+
+  fetchLinks = async () => {
+    const data = await fetchData(quickLinksURL);
+    const links = data.map(l => ({ title: l.Title, url: l.url.Url }));
+    this.setState({
+      links,
+      isLoading: false
+    });
+  };
+
+  async getCurrenUser() {
+    const user = await fetchData(userURL);
+    this.setState({
+      user: {
+        name: user.Title || "",
+        groups: user.Groups || [],
+        isAdmin:
+          user.Groups && isDevelopment ? false : user.Groups.results.indexOf("Administrators")
+      }
+    });
   }
 
-  filterData = ({ categoria, subcategoria, code }) => {
+  render() {
+    const actions = {
+      filterData: this.filterData,
+      fetchLinks: this.fetchLinks,
+      fetchDocuments: this.fetchDocuments,
+      fetchUserName: this.getCurrenUser
+    };
+
+    return (
+      <StoreProvider value={{ actions, store: this.state }}>
+        <App />
+      </StoreProvider>
+    );
+  }
+}
+
+function connect(Component) {
+  return props => (
+    <StoreConsumer>
+      {({ actions, store }) => <Component {...props} actions={actions} store={store} />}
+    </StoreConsumer>
+  );
+}
+
+export { StoreConsumer, connect, Container as default };
+
+/*   filterData = ({ categoria, subcategoria, code }) => {
     //TODO
     // poder recibir un array de categorias // array.oneOf()
 
@@ -80,27 +102,4 @@ class Container extends Component {
     console.log(result);
 
     this.setState({ result });
-  };
-
-  render() {
-    const actions = {
-      filterData: this.filterData
-    };
-
-    return (
-      <StoreProvider value={{ actions, store: this.state }}>
-        <App />
-      </StoreProvider>
-    );
-  }
-}
-
-function connect(Component) {
-  return props => (
-    <StoreConsumer>
-      {({ actions, store }) => <Component {...props} actions={actions} store={store} />}
-    </StoreConsumer>
-  );
-}
-
-export { StoreConsumer, connect, Container as default };
+  }; */
