@@ -1,3 +1,3 @@
-const isDevelopment = false;
+const isDevelopment = true;
 
 export { isDevelopment };

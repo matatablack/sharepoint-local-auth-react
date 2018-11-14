@@ -55,12 +55,6 @@ function formatData(data) {
 
 export default formatData;
 
-function removeDuplicates(myArr, prop) {
-  return myArr.filter((obj, pos, arr) => {
-    return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
-  });
-}
-
 function buildTree(document) {
   const { categoria, subcategoria, code, codeMeta, name, url } = document;
 

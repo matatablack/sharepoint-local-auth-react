@@ -2,20 +2,6 @@ import React, { Component } from "react";
 import { Card, List, Icon } from "antd";
 import { connect } from "./../";
 
-const data = [
-  {
-    title: "Racing car sprays burning fuel into crowd.",
-    url: "https://google.com"
-  },
-  {
-    title: "Australian walks 100km after outback crash., fter outback crash.",
-    url: "https://google.com"
-  },
-  {
-    title: "Los Angeles battles huge wildfires.",
-    url: "https://google.com/Los-Angeles-battles-hugewildfires"
-  }
-];
 class QuickLinks extends Component {
   componentDidMount() {
     this.props.actions.fetchLinks();

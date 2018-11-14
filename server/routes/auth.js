@@ -1,5 +1,6 @@
+require("dotenv").config();
 const newman = require("newman");
-const { CLIENT_ID, CLIENT_SECRET, TARGET_HOST, PRINCIPAL, REALM } = require("../constants.js");
+const { CLIENT_ID, CLIENT_SECRET, TARGET_HOST, PRINCIPAL, REALM } = process.env;
 
 var express = require("express");
 var router = express.Router();

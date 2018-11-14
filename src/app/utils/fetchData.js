@@ -13,7 +13,8 @@ export default async function fetchData(URL) {
   }
 
   return fetch(URL, {
-    headers
+    headers,
+    credentials: isDevelopment ? "same-origin" : "include"
   })
     .then(res => res.json())
     .then(d => {

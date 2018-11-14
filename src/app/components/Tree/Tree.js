@@ -1,5 +1,5 @@
 import React from "react";
-import { Tree, Input, Icon } from "antd";
+import { Tree, Input } from "antd";
 import { connect } from "./../../index";
 
 const TreeNode = Tree.TreeNode;
@@ -86,7 +86,12 @@ class SearchTree extends React.Component {
           <TreeNode
             key={item.key}
             title={
-              <a href={`https://partner.coca-cola.com${item.url}`} download target="_blank">
+              <a
+                href={`https://partner.coca-cola.com${item.url}`}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {title}
               </a>
             }
